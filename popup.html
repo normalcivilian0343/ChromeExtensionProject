@@ -1,6 +1,59 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Article Annotator and Notetaker</title>
+  <meta charset="UTF-8">
+  <title>Article Annotations</title>
+  <link rel="stylesheet" href="popup.css">
 </head>
+<body>
+
+//main
+  <div id="app">
+
+//header
+<header>
+      <h1>Article Annotator</h1>
+    </header>
+
+//active article
+<section id="current-article">
+      <p id="article-title">No article detected</p>
+      <button id="detect-article">Detect Current Article</button>
+    </section>
+
+//quick action
+<div class="quick-actions">
+      <button id="highlight-mode"> Highlight</button>
+      <button id="summarize-btn">AI Summarize</button>
+      <button id="define-btn"> Define Word</button>
+    </div>
+
+//extraction and highlights
+<section id="highlights-section">
+      <h3> Your Highlights</h3>
+      <ul id="highlights-list">
+        <li class="empty-message">No highlights yet</li>
+      </ul>
+    </section>
+
+//notetaking area
+  <section id="notes-section">
+      <h3> Your Notes</h3>
+      <textarea id="note-input" placeholder="Type your note here..."></textarea>
+      <button id="save-note">Save Note</button>
+      <ul id="notes-list">
+        <li class="empty-message">No notes saved</li>
+      </ul>
+    </section>
+
+//Settings
+    <footer>
+      <button id="clear-data">Clear All Data</button>
+      <span id="word-count">0 notes · 0 highlights</span>
+    </footer>
+
+  </div>
+  
+  <script src="popup.js"></script>
+</body>
+</html>
