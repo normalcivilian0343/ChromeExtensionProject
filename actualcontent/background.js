@@ -17,5 +17,5 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
     }
         
     }
-});
+,);
 //triggers when a message is received 
