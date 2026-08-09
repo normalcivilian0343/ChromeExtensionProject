@@ -1,7 +1,7 @@
 {
     "manifest_version": 3,
     "name": "Article Annotator And Notetaking",
-    "version": "0.1.0",
+    "version": "1",
     "description": "Highlighting and notetaking for articles",
     "permissions": ["storage", "activeTab", "scripting", "contextMenus"],
     "host_permissions": ["<all_urls>"],
