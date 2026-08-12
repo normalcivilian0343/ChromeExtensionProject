@@ -1,0 +1,31 @@
+.aa-float-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 9999;
+  background-color: #ae10a8;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.aa-float-btn:hover {
+  background-color: #33333a;
+}
+
+mark.aa-highlight {
+  background-color: #ae10a8;
+  color: white;
+  border-radius: 2px;
+  padding: 0 1px;
+  cursor: pointer;
+  transition: outline 0.2s ease;
+}
+
+mark.aa-highlight:hover {
+  outline: 2px solid #e6d65c;
+}
