@@ -1,7 +1,4 @@
 // Active article detection
-var detectButton = document.getElementById("detect-article");
-detectButton.addEventListener("click", detectArticle);
-
 function detectArticle() {
     // Get the main article content
     const article = document.querySelector('article') || 
@@ -32,26 +29,18 @@ function detectArticle() {
     }
 }
 
-// Quick action - Highlight mode 
-var highlightButton = document.getElementById("highlight-article");
-highlightButton.addEventListener("click", highlightMode);
-
+// Quick action - Highlight mode
 let isHighlightMode = false;
 
 function highlightMode() {
     isHighlightMode = !isHighlightMode;
-    
+
     if (isHighlightMode) {
         showNotification('Highlight mode activated - Select text to highlight');
-        highlightButton.textContent = 'Stop Highlighting';
-        highlightButton.style.backgroundColor = '#ff6b6b';
-        
         document.removeEventListener("mouseup", handleHighlight);
         document.addEventListener("mouseup", handleHighlight);
     } else {
         showNotification('Highlight mode deactivated');
-        highlightButton.textContent = 'Highlight Mode';
-        highlightButton.style.backgroundColor = '';
         document.removeEventListener("mouseup", handleHighlight);
     }
 }
@@ -81,9 +70,6 @@ function saveHighlight(text) {
 }
 
 // Summarize function
-var summarizeButton = document.getElementById("summarize-btn");
-summarizeButton.addEventListener("click", summarizeMode);
-
 function summarizeMode() {
     // Get the article content
     chrome.storage.local.get(['currentArticle'], (data) => {
@@ -119,25 +105,17 @@ function summarizeMode() {
 }
 
 // Define mode - Dictionary 
-var defineBtn = document.getElementById("define-btn");
-defineBtn.addEventListener("click", toggleDefineMode);
-
 let isDefineMode = false;
 
 function toggleDefineMode() {
     isDefineMode = !isDefineMode;
-    
+
     if (isDefineMode) {
         showNotification('Definition mode activated - Double-click any word');
-        defineBtn.textContent = 'Stop Definition';
-        defineBtn.style.backgroundColor = '#4ecdc4';
-        
         document.removeEventListener("dblclick", handleDefinition);
         document.addEventListener("dblclick", handleDefinition);
     } else {
         showNotification('Definition mode deactivated');
-        defineBtn.textContent = 'Define Mode';
-        defineBtn.style.backgroundColor = '';
         document.removeEventListener("dblclick", handleDefinition);
     }
 }
@@ -263,6 +241,34 @@ document.head.appendChild(style);
 document.addEventListener('DOMContentLoaded', () => {
     // Optional: Auto-detect article on page load
     setTimeout(detectArticle, 1000);
+});
+
+// Handle messages from popup/background
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    if (!message || !message.action) return;
+    switch (message.action) {
+        case 'detectArticle':
+            detectArticle();
+            sendResponse({ status: 'ok' });
+            break;
+        case 'toggleHighlight':
+            highlightMode();
+            sendResponse({ status: 'ok' });
+            break;
+        case 'summarize':
+            summarizeMode();
+            sendResponse({ status: 'ok' });
+            break;
+        case 'toggleDefine':
+            toggleDefineMode();
+            sendResponse({ status: 'ok' });
+            break;
+        case 'highlightSelectedText':
+            if (message.text) saveHighlight(message.text);
+            sendResponse({ status: 'ok' });
+            break;
+    }
+    return true;
 });
 
 // Cleanup listeners when extension is disabled

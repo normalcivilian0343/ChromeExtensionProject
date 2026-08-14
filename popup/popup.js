@@ -8,6 +8,25 @@ document.addEventListener('DOMContentLoaded', () => {
       container.appendChild(item);
     });
   });
+  // Wire popup buttons to content script
+  function sendMessageToActiveTab(message) {
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      if (!tabs || !tabs[0]) return;
+      chrome.tabs.sendMessage(tabs[0].id, message);
+    });
+  }
+
+  const detectBtn = document.getElementById('detect-article');
+  if (detectBtn) detectBtn.addEventListener('click', () => sendMessageToActiveTab({ action: 'detectArticle' }));
+
+  const highlightBtn = document.getElementById('highlight-mode');
+  if (highlightBtn) highlightBtn.addEventListener('click', () => sendMessageToActiveTab({ action: 'toggleHighlight' }));
+
+  const summarizeBtn = document.getElementById('summarize-btn');
+  if (summarizeBtn) summarizeBtn.addEventListener('click', () => sendMessageToActiveTab({ action: 'summarize' }));
+
+  const defineBtn = document.getElementById('define-btn');
+  if (defineBtn) defineBtn.addEventListener('click', () => sendMessageToActiveTab({ action: 'toggleDefine' }));
 });
 
 function escapeHtml(str) {
