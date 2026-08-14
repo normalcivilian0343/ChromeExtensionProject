@@ -1,4 +1,5 @@
 // Active article detection
+console.log('Article Annotator content script loaded');
 function detectArticle() {
     // Get the main article content
     const article = document.querySelector('article') || 
@@ -245,8 +246,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Handle messages from popup/background
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-    if (!message || !message.action) return;
-    switch (message.action) {
+    if (!message) return;
+    const action = message.action || message.type;
+    console.log('content script received message:', action, message);
+    switch (action) {
         case 'detectArticle':
             detectArticle();
             sendResponse({ status: 'ok' });
@@ -264,6 +267,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
             sendResponse({ status: 'ok' });
             break;
         case 'highlightSelectedText':
+        case 'highlight-selected-text':
             if (message.text) saveHighlight(message.text);
             sendResponse({ status: 'ok' });
             break;
