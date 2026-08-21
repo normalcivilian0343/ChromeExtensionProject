@@ -10,11 +10,40 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   // Wire popup buttons to content script
   function sendMessageToActiveTab(message) {
-    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-      if (!tabs || !tabs[0]) return;
-      chrome.tabs.sendMessage(tabs[0].id, message);
-    });
-  }
+  chrome.tabs.query(
+    { active: true, currentWindow: true },
+    (tabs) => {
+      if (!tabs || !tabs[0] || !tabs[0].id) {
+        console.error('No active tab found');
+        return;
+      }
+
+      const tabId = tabs[0].id;
+
+      chrome.tabs.sendMessage(
+        tabId,
+        message,
+        (response) => {
+          if (chrome.runtime.lastError) {
+            console.error(
+              'Content script error:',
+              chrome.runtime.lastError.message
+            );
+
+            alert(
+              'The Article Annotator content script is not loaded on this page. Please refresh the page and try again.'
+            );
+
+            return;
+          }
+
+          console.log('Content script response:', response);
+        }
+      );
+    }
+  );
+}
+
 
   const detectBtn = document.getElementById('detect-article');
   if (detectBtn) detectBtn.addEventListener('click', () => sendMessageToActiveTab({ action: 'detectArticle' }));
