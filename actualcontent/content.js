@@ -47,10 +47,43 @@ function highlightMode() {
 }
 
 function handleHighlight() {
-    const selection = window.getSelection().toString().trim();
-    if (selection.length > 0) {
-        saveHighlight(selection);
+    const selection = window.getSelection();
+
+    if (!selection || selection.rangeCount === 0) {
+        return;
+    }
+
+    const selectedText = selection.toString().trim();
+
+    if (!selectedText) {
+        return;
+    }
+
+    const range = selection.getRangeAt(0);
+
+    const mark = document.createElement('mark');
+
+    mark.style.backgroundColor = '#ffeb3b';
+    mark.style.color = '#000';
+    mark.style.padding = '2px 0';
+    mark.style.borderRadius = '2px';
+
+    try {
+        range.surroundContents(mark);
+
+        saveHighlight(selectedText);
+
         showNotification('Text highlighted!');
+
+        selection.removeAllRanges();
+    } catch (error) {
+        console.error('Highlight error:', error);
+
+        showNotification(
+            'Could not highlight that selection. Try selecting text within one paragraph.'
+        );
+    }
+}
     }
 }
 
