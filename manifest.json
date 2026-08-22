@@ -16,14 +16,14 @@
             "run_at": "document_idle"
         }
     ],
-    "action": {
-        "default_popup": "popup/popup.html",
-        "default_title": "Article Annotator and Notetaking"
-    },
-    "default_icon": "bookicon.png"
-        
-    
-
-
-
+   "action": {
+    "default_popup": "popup/popup.html",
+    "default_title": "Article Annotator and Notetaking",
+    "default_icon": {
+        "16": "bookicon.png",
+        "32": "bookicon.png",
+        "48": "bookicon.png",
+        "128": "bookicon.png"
+    }
 }
+ 
