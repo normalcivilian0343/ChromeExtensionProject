@@ -14,11 +14,12 @@ div {
 }
 
 button {
-    background-color: #dad6ea;
-    color: white;
-    border: none;
+    background-color: #8abdd7;
+    color: rgb(0, 0, 0);
+    border: 5px solid #010a0d;
     border-radius: 5px;
     padding: 10px 20px;
     font-size: 14px;
+    font-family: Fredoka, Arial, Helvetica, sans-serif;
     cursor: pointer;
 }
