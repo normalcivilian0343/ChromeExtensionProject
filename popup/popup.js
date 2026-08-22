@@ -57,6 +57,32 @@ document.addEventListener('DOMContentLoaded', () => {
   const defineBtn = document.getElementById('define-btn');
   if (defineBtn) defineBtn.addEventListener('click', () => sendMessageToActiveTab({ action: 'toggleDefine' }));
 });
+const clearBtn = document.getElementById('clear-data');
+
+if (clearBtn) {
+  clearBtn.addEventListener('click', () => {
+    const confirmed = confirm('Are you sure you want to clear all saved highlights?');
+
+    if (!confirmed) {
+      return;
+    }
+
+    chrome.storage.local.remove('highlights', () => {
+      if (chrome.runtime.lastError) {
+        console.error('Error clearing highlights:', chrome.runtime.lastError.message);
+        return;
+      }
+
+      const container = document.getElementById('highlights-list');
+
+      if (container) {
+        container.innerHTML = '';
+      }
+
+      console.log('All highlights cleared');
+    });
+  });
+}
 
 function escapeHtml(str) {
   const div = document.createElement('div');
