@@ -1,7 +1,13 @@
 header {
-    color: #E3F2FD;
+    color: #17517a;
     text-align: left;
     font-family: Arial, Helvetica, sans-serif;
-    font-size: 20px;
+    font-size: 25px;
 }
 
+div {
+    color: #40a8f1;
+    text-align: left;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+}
