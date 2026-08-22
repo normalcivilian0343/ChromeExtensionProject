@@ -1,13 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&display=swap');
 header {
-    color: #9db4c0;
+    color: #58A4B0;
     text-align: left;
     font-family: Fredoka, Arial, Helvetica, sans-serif;
     font-size: 25px;
 }
 
 div {
-    color: #9db4c0;
+    color: #58A4B0;
     text-align: left;
     font-family: Fredoka, Arial, Helvetica, sans-serif;
     font-size: 14px;
@@ -15,8 +15,8 @@ div {
 
 button {
     background-color: #ffffff;
-    color: #1b2a79;
-    border: 2px solid #1b2a79;
+    color: #284B63;
+    border: 2px solid #284B63;
     border-radius: 5px;
     padding: 10px 20px;
     font-size: 14px;
