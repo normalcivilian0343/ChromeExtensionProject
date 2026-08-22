@@ -84,8 +84,8 @@ function handleHighlight() {
         );
     }
 }
-    }
-}
+    
+
 
 function saveHighlight(text) {
     chrome.storage.local.get({ highlights: [] }, (data) => {
