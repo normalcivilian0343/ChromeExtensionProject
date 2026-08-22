@@ -1,20 +1,20 @@
 @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&display=swap');
 header {
-    color: #5c6b73;
+    color: #9db4c0;
     text-align: left;
     font-family: Fredoka, Arial, Helvetica, sans-serif;
     font-size: 25px;
 }
 
 div {
-    color: #5C6B73;
+    color: #9db4c0;
     text-align: left;
     font-family: Fredoka, Arial, Helvetica, sans-serif;
     font-size: 14px;
 }
 
 button {
-    background-color: #253237;
+    background-color: #5c6b73;
     color: #E0FBFC;
     border: 2px solid #010a0d;
     border-radius: 5px;
