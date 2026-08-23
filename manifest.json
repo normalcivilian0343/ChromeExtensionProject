@@ -3,7 +3,8 @@
     "name": "Article Annotator And Notetaking",
     "version": "0.1.0",
     "description": "Highlighting and notetaking for articles",
-    "permissions": ["storage", "activeTab", "scripting", "contextMenus"],
+    "permissions": ["storage", "activeTab", "scripting", "contextMenus","aiLanguageModelOriginTrial"
+],
     "host_permissions": ["<all_urls>"],
     "background": {
         "service_worker": "background.js"

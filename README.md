@@ -9,4 +9,4 @@ To set this chrome extension up, there are just three simple steps!
 You now have full acess to our features!!
 
 # What exactly does our project do?
-While you open an article
+While you open an article, it allows you to take notes, have an AI summary, define specific words, and save highlighted/annotated sentences, so that the next time you open up the article, you can see what exactly you wanted to remember! It creates an easy and usable workspace, instead of having a chopped up work ethic.

@@ -1,26 +1,26 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,497&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@484&display=swap');
 header {
-    color: #58A4B0;
+    color: #3581B8;
     text-align: left;
-    font-family: DM+Sans, Arial, Helvetica, sans-serif;
+    font-family: Manrope, Arial, Helvetica, sans-serif;
     font-size: 25px;
 }
 
 div {
-    color: #58A4B0;
+    color: #3581B8;
     text-align: left;
-    font-family: DM+Sans, Arial, Helvetica, sans-serif;
+    font-family: Manrope, Arial, Helvetica, sans-serif;
     font-size: 14px;
 }
 
 button {
-    background-color: #ffffff;
-    color: #284B63;
+    background-color: #fbfff1;
+    color: #A8c4ec;
     border: 2px solid #284B63;
     border-radius: 5px;
     padding: 10px 20px;
     font-size: 14px;
-    font-family: DM+Sans, Arial, Helvetica, sans-serif;
+    font-family: Manrope, Arial, Helvetica, sans-serif;
     cursor: pointer;
 }
 
@@ -31,6 +31,14 @@ textarea {
     border: 1px solid #ccc;
     border-radius: 5px;
     font-size: 14px;
-    font-family: DM+Sans, Arial, Helvetica, sans-serif;
+    font-family: Manrope, Arial, Helvetica, sans-serif;
     resize: none;
+}
+
+output {
+    display: block;
+    margin-top: 10px;
+    color: #3581B8;
+    font-family: Manrope, Arial, Helvetica, sans-serif;
+    font-size: 14px;
 }

@@ -10,7 +10,7 @@ function detectArticle() {
     
     if (article) {
         // Extract text content
-        const textContent = article.innerText || article.textContent;
+        const textContent = article.innerText || article.textContent || '';
         
         // Store the article content
         chrome.storage.local.set({ 
@@ -21,10 +21,12 @@ function detectArticle() {
                 timestamp: Date.now()
             }
         }, () => {
-            console.log('Article detected and saved');
+        console.log('Article detected and saved');
 
-            showNotification('Article detected successfully!');
-        });
+        showNotification(
+            'Article detected successfully!'
+        );
+    });
     } else {
         showNotification('No article found on this page');
     }
@@ -103,56 +105,199 @@ function saveHighlight(text) {
     });
 }
 
-// Summarize function
-function summarizeMode() {
-    // Get the article content
-    chrome.storage.local.get(['currentArticle'], (data) => {
-        const article = data.currentArticle;
-        
-        if (!article || !article.content) {
-            showNotification('No article detected. Click "Detect Article" first.');
-            return;
-        }
-        
-        
-        const content = article.content;
-        const sentences = content.match(/[^.!?]+[.!?]+/g) || [content];
-        const summary = sentences.slice(0, 3).join(' '); // First 3 sentences
-        
-        // Store summary
-        chrome.storage.local.set({ 
-            currentSummary: {
-                text: summary,
-                url: window.location.href,
-                title: document.title,
-                timestamp: Date.now()
-            }
-        }, () => {
-            // Open popup 
-            showNotification('Summary created! Click the extension icon to view.');
-            console.log('Summary:', summary);
-            
-            // Send message to background script to open popup
-            chrome.runtime.sendMessage({ action: 'showSummary', summary: summary });
-        });
-    });
-}
+
 
 // Define mode - Dictionary 
+// ===============================
+// Definition Mode
+// ===============================
+
 let isDefineMode = false;
 
 function toggleDefineMode() {
     isDefineMode = !isDefineMode;
 
     if (isDefineMode) {
-        showNotification('Definition mode activated - Double-click any word');
-        document.removeEventListener("dblclick", handleDefinition);
-        document.addEventListener("dblclick", handleDefinition);
+        showNotification(
+            'Definition mode activated - double-click a word'
+        );
+
+        document.removeEventListener('dblclick', handleDefinition);
+        document.addEventListener('dblclick', handleDefinition);
     } else {
         showNotification('Definition mode deactivated');
-        document.removeEventListener("dblclick", handleDefinition);
+
+        document.removeEventListener('dblclick', handleDefinition);
+
+        removeDefinitionPopup();
     }
 }
+
+function handleDefinition(event) {
+    if (!isDefineMode) {
+        return;
+    }
+
+    const selection = window.getSelection();
+
+    if (!selection || selection.rangeCount === 0) {
+        return;
+    }
+
+    const word = selection.toString().trim();
+
+    // Only define a single word
+    if (!word || /\s/.test(word)) {
+        return;
+    }
+
+    // Remove punctuation around the word
+    const cleanWord = word
+        .replace(/^[^\w'-]+|[^\w'-]+$/g, '')
+        .toLowerCase();
+
+    if (!cleanWord) {
+        return;
+    }
+
+    showDefinitionPopup(
+        cleanWord,
+        'Looking up definition...',
+        event.clientX,
+        event.clientY
+    );
+
+    // Ask the extension service worker to fetch the definition
+    chrome.runtime.sendMessage(
+        {
+            action: 'defineWord',
+            word: cleanWord
+        },
+        (response) => {
+            if (chrome.runtime.lastError) {
+                console.error(
+                    'Definition request error:',
+                    chrome.runtime.lastError.message
+                );
+
+                showDefinitionPopup(
+                    cleanWord,
+                    'Unable to look up this word.',
+                    event.clientX,
+                    event.clientY
+                );
+
+                return;
+            }
+
+            if (!response || response.status !== 'ok') {
+                showDefinitionPopup(
+                    cleanWord,
+                    response?.error || 'Definition not found.',
+                    event.clientX,
+                    event.clientY
+                );
+
+                return;
+            }
+
+            showDefinitionPopup(
+                cleanWord,
+                response.definition,
+                event.clientX,
+                event.clientY
+            );
+        }
+    );
+}
+
+function showDefinitionPopup(word, definition, x, y) {
+    removeDefinitionPopup();
+
+    const popup = document.createElement('div');
+
+    popup.id = 'definition-popup';
+
+    popup.style.cssText = `
+        position: fixed;
+        left: ${Math.min(x + 10, window.innerWidth - 330)}px;
+        top: ${Math.max(y - 80, 10)}px;
+        width: 280px;
+        background: #ffffff;
+        color: #222222;
+        border: 1px solid #dcdcdc;
+        border-radius: 10px;
+        padding: 14px 38px 14px 16px;
+        box-shadow: 0 6px 24px rgba(0, 0, 0, 0.18);
+        z-index: 2147483647;
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+        line-height: 1.5;
+        box-sizing: border-box;
+    `;
+
+    const title = document.createElement('div');
+
+    title.textContent = word;
+
+    title.style.cssText = `
+        font-size: 16px;
+        font-weight: 700;
+        color: #1f2937;
+        margin-bottom: 6px;
+    `;
+
+    const text = document.createElement('div');
+
+    text.textContent = definition;
+
+    text.style.cssText = `
+        color: #374151;
+    `;
+
+    const closeButton = document.createElement('button');
+
+    closeButton.textContent = '×';
+
+    closeButton.style.cssText = `
+        position: absolute;
+        top: 5px;
+        right: 8px;
+        border: none;
+        background: transparent;
+        color: #888;
+        font-size: 20px;
+        cursor: pointer;
+        padding: 2px 5px;
+        line-height: 1;
+    `;
+
+    closeButton.addEventListener('click', () => {
+        popup.remove();
+    });
+
+    popup.appendChild(title);
+    popup.appendChild(text);
+    popup.appendChild(closeButton);
+
+    document.body.appendChild(popup);
+
+    // Remove after 8 seconds
+    setTimeout(() => {
+        if (popup.parentElement) {
+            popup.remove();
+        }
+    }, 8000);
+}
+
+function removeDefinitionPopup() {
+    const popup = document.getElementById('definition-popup');
+
+    if (popup) {
+        popup.remove();
+    }
+}
+
 
 function handleDefinition(event) {
     const selection = window.getSelection().toString().trim();
@@ -284,17 +429,18 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     console.log('content script received message:', action, message);
     switch (action) {
         case 'detectArticle':
-            detectArticle();
-            sendResponse({ status: 'ok' });
-            break;
+    detectArticle();
+    sendResponse({
+        status: 'ok'
+    });
+    break;
+
         case 'toggleHighlight':
             highlightMode();
             sendResponse({ status: 'ok' });
             break;
-        case 'summarize':
-            summarizeMode();
-            sendResponse({ status: 'ok' });
-            break;
+       
+
         case 'toggleDefine':
             toggleDefineMode();
             sendResponse({ status: 'ok' });
