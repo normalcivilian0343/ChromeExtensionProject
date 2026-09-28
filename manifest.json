@@ -2,13 +2,20 @@
     "manifest_version": 3,
     "name": "Article Annotator And Notetaking",
     "version": "0.1.0",
-    "description": "Highlighting and notetaking for articles",
+    "description": "Annotating directly on articles",
     "permissions": ["storage", "activeTab", "scripting", "contextMenus","aiLanguageModelOriginTrial"
 ],
     "host_permissions": ["<all_urls>"],
     "background": {
         "service_worker": "background.js"
     },
+    "oauth2": {
+    "client_id": "YOUR_GOOGLE_CLOUD_CLIENT_ID.apps.googleusercontent.com",
+    "scopes": [
+      "https://www.googleapis.com/auth/documents"
+    ]
+    },
+    
     "content_scripts": [
         {
             "matches": ["<all_urls>"],
