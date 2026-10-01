@@ -3,7 +3,7 @@
     "name": "Article Annotator And Notetaking",
     "version": "0.1.0",
     "description": "Annotating directly on articles",
-    "permissions": ["storage", "activeTab", "scripting", "contextMenus","aiLanguageModelOriginTrial"
+    "permissions": ["storage", "activeTab", "scripting", "contextMenus"
 ],
     "host_permissions": ["<all_urls>"],
     "background": {
@@ -33,6 +33,6 @@
         "48": "bookicon.png",
         "128": "bookicon.png"
     }
-}
+} 
 }
  

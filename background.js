@@ -7,7 +7,7 @@ chrome.runtime.onInstalled.addListener(() => {
         title: "Highlight with Annotator",
         contexts: ["selection"]
     });
-    console.log("Extension successfullyinstalled");
+    console.log("Extension successfully installed");
 });
 //triggers when extension's toolbar icon is clicked
 chrome.contextMenus.onClicked.addListener((info, tab) => {
@@ -18,3 +18,4 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
         
 });
 //triggers when a message is received 
+ 
