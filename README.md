@@ -17,7 +17,7 @@ To be able to use this version of our project, you need to be on an actual artic
 
 1. The highlight feature - you FIRST have to click on the highlight button and then you can proceed to highlight. DO NOT try to highlight without pressing the button! Tip: there will be a small black box that will say if highlight mode is activated or deactivated
 2. The define word - like the highlight button, click on the button first and then double click a word to define it.
-3. AI Summary - simply click the AI summary button and shortly (may take longer or shorter depending on how long and compact the article is), it will give you key points from the text, giving you a brief summary!
+3. AI Summary - simply click the AI summary button and shortly (may take longer or shorter depending on how long and compact the article is), it will give you key points from the text, giving you a brief summary! PLEASE WAIT FOR THE AI SUMMERY TO POP UP, IT MAY TAKE A FEW MINUTES
 4. Detect Article - simply click the button
 5. Adding notes - type a note and press "save note" button near the bottom
 6. Clear all data - press this button to reset everything - be sure not to accidently press it!
