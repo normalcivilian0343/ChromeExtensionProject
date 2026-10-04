@@ -34,6 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
   }
+  
 
   // Save data to chrome.storage.local
   function saveData(highlights, notes, article) {
