@@ -14,6 +14,7 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
     console.log("Extension icon clicked on tab: ", tab.id);
     if (info.menuItemId === "aa-highlight-selected-text" && tab?.id) {
         chrome.tabs.sendMessage(tab.id, { type: "highlight-selected-text" ,  text: info.selectionText });
+    
     }
         
 });
