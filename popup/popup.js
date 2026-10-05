@@ -1,5 +1,3 @@
-console.log('🔥 Article Annotator popup.js loaded');
-
 document.addEventListener('DOMContentLoaded', () => {
   // Load saved highlights
   chrome.storage.local.get({ highlights: [] }, (data) => {
