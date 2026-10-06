@@ -193,6 +193,7 @@ if (detectBtn) {
     });
   }
 
+  
   // Summarize button
 const summarizeBtn = document.getElementById('summarize-btn');
 const output = document.getElementById('output');
@@ -201,6 +202,7 @@ if (summarizeBtn) {
   summarizeBtn.addEventListener('click', async () => {
     try {
       if (output) {
+        outputLanguage: "en"
         output.textContent = 'Generating summary...';
       }
 
