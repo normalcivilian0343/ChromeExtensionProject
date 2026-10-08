@@ -16,6 +16,7 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
         chrome.tabs.sendMessage(tab.id, { type: "highlight-selected-text" ,  text: info.selectionText });
     
     }
+    
         
 });
 //triggers when a message is received 
