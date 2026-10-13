@@ -13,6 +13,13 @@ document.addEventListener('DOMContentLoaded', () => {
  const clearDataBtn = document.getElementById('clear-data');
  const wordCountEl = document.getElementById('word-count');
 
+//event listeners
+ detectBtn.addEventListener('click', detectCurrentArticle);
+ highlightBtn.addEventListener('click', startHighlightMode);
+ summarizeBtn.addEventListener('click', summarizeArticle);
+ defineBtn.addEventListener('click', defineWord);
+ saveNoteBtn.addEventListener('click', saveNote);
+ clearDataBtn.addEventListener('click', clearAllData);
 
  // State
  let currentArticle = {
@@ -306,13 +313,7 @@ document.addEventListener('DOMContentLoaded', () => {
  refreshUI();
 
 
- // Event listeners
- detectBtn.addEventListener('click', detectCurrentArticle);
- highlightBtn.addEventListener('click', startHighlightMode);
- summarizeBtn.addEventListener('click', summarizeArticle);
- defineBtn.addEventListener('click', defineWord);
- saveNoteBtn.addEventListener('click', saveNote);
- clearDataBtn.addEventListener('click', clearAllData);
+
 
 
  // Allow Enter key to save note
