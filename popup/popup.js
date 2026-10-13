@@ -8,12 +8,10 @@ document.addEventListener('DOMContentLoaded', () => {
      return;
    }
 
-
+//highlights are displayed in reverse order to show the most recent first
    data.highlights.reverse().forEach((h) => {
      const item = document.createElement('li');
      item.className = 'highlight-item';
-
-
      const text = document.createElement('p');
      text.textContent = h.text || '';
 
@@ -29,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
  });
 
 
- // Send message to content script
+ // Send message to content script -- what happens when the user clicks the "Highlight Mode" button
  function sendMessageToActiveTab(message) {
  return new Promise((resolve, reject) => {
    chrome.tabs.query(
@@ -69,6 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
            )
          );
          return;
+         
        }
 
 
@@ -279,7 +278,7 @@ if (output) {
 
 
 
-
+// Get the text of the current page
      const tabs = await chrome.tabs.query({
        active: true,
        currentWindow: true
