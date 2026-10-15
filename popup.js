@@ -1,4 +1,6 @@
 //when popup is opened
+
+
 document.addEventListener('DOMContentLoaded', () => {
  // DOM elements
  const articleTitleEl = document.getElementById('article-title');
@@ -232,23 +234,16 @@ document.addEventListener('DOMContentLoaded', () => {
  }
 
 
- // Define Word
- chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-  if (tabs[0]?.id) {
-    // Send a message to the content script of that tab
-    chrome.tabs.sendMessage(tabs[0].id, { action: "GET_SELECTED_WORD" }, (response) => {
-      if (response && response.selectedWord) {
-        console.log("Selected word:", response.selectedWord);
-        // Update your popup UI here
-      }
-    });
-  }
-});
+ // Define Word: placeholder functionality
+ function defineWord() {
+   alert('Define Word feature: Select a word on the page and click this to see its definition. (Functionality placeholder)');
+   // In a real implementation, you'd send a message to content script to get selected word.
+ }
 
 
  // Save a new note
  async function saveNote() {
-   const noteText = noteInput.value();
+   const noteText = noteInput.value.trim();
    if (!noteText) {
      alert('Please enter a note.');
      return;

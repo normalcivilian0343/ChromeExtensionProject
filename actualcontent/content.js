@@ -32,8 +32,6 @@ function detectArticle() {
     }
 }
 
-
-
 // Quick action - Highlight mode
 let isHighlightMode = false;
 
@@ -169,7 +167,7 @@ function handleDefinition(event) {
         event.clientY
     );
 
-
+    // Ask the extension service worker to fetch the definition
     chrome.runtime.sendMessage(
         {
             action: 'defineWord',
@@ -195,9 +193,16 @@ function handleDefinition(event) {
     
                 return;
             }
-        )}
-    
 
+            showDefinitionPopup(
+                cleanWord,
+                response.definition,
+                event.clientX,
+                event.clientY
+            );
+        }
+
+    
 
 function showDefinitionPopup(word, definition, x, y) {
     removeDefinitionPopup();
@@ -286,6 +291,29 @@ function removeDefinitionPopup() {
     }
 }
 
+
+function handleDefinition(event) {
+    const selection = window.getSelection().toString().trim();
+    
+    if (selection.length > 0 && selection.split(' ').length === 1) {
+        // Single word selected
+        const word = selection.toLowerCase();
+        
+        // Use Dictionary API
+        fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`)
+            .then(response => {
+                if (!response.ok) throw new Error('Word not found');
+                return response.json();
+            })
+            .then(data => {
+                const definition = data[0].meanings[0].definitions[0].definition;
+                showDefinitionPopup(word, definition, event.clientX, event.clientY);
+            })
+            .catch(error => {
+                showDefinitionPopup(word, 'Definition not found', event.clientX, event.clientY);
+            });
+    }
+}
 
 // Helper function to show definition popup
 function showDefinitionPopup(word, definition, x, y) {
