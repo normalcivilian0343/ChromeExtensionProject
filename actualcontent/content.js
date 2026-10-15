@@ -169,17 +169,6 @@ function handleDefinition(event) {
         event.clientY
     );
 
-    // Ask the extension service worker to fetch the definition
-    chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-        if (request.action === 'defineWord') {
-            // Simulate a delay for the API call
-            setTimeout(() => {
-                // Replace this with your actual API call
-                const definition = `Definition for "${request.word}" goes here.`;
-                sendResponse({ status: 'ok', definition });
-            }, 1000);
-        }
-    });
 
     chrome.runtime.sendMessage(
         {
@@ -203,19 +192,12 @@ function handleDefinition(event) {
                 return;
             }
 
-            if (!response || response.status !== 'ok') {
-                showDefinitionPopup(
-                    cleanWord,
-                    response?.error || 'Definition not found.',
-                    event.clientX,
-                    event.clientY
-                );
-
+    
                 return;
             }
-        }
-    );
-}
+        )}
+    
+
 
 function showDefinitionPopup(word, definition, x, y) {
     removeDefinitionPopup();
