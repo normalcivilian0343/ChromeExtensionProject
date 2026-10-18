@@ -19,7 +19,7 @@
     
     "content_scripts": [
         {
-            "mat   ches": ["<all_urls>"],
+            "matches": ["<all_urls>"],
             "js": ["actualcontent/content.js"],
             "css": ["content.css"],
             "run_at": "document_idle"

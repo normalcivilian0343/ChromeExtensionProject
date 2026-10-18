@@ -18,9 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
 //event listeners
  detectBtn.addEventListener('click', detectCurrentArticle);
  highlightBtn.addEventListener('click', startHighlightMode);
- summarizeBtn.addEventListener('click', summarizeArticle);
- defineBtn.addEventListener('click', defineWord);
- saveNoteBtn.addEventListener('click', saveNote);
+ summarizeBtn.addEventListener('click', summarizeArticle); saveNoteBtn.addEventListener('click', saveNote);
  clearDataBtn.addEventListener('click', clearAllData);
 
  // State

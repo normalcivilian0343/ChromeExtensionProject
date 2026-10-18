@@ -8,8 +8,9 @@ document.addEventListener('DOMContentLoaded', () => {
      return;
    }
 
+container.replaceChildren();
 
-   data.highlights.reverse().forEach((h) => {
+ (data.highlights || []).slice().reverse().forEach((h) => {
      const item = document.createElement('li');
      item.className = 'highlight-item';
 
@@ -26,6 +27,95 @@ document.addEventListener('DOMContentLoaded', () => {
      item.appendChild(title);
      container.appendChild(item);
    });
+  
+ // Save Note button
+ const noteInput = document.getElementById('note-input');
+ const saveNoteBtn = document.getElementById('save-note');
+ const notesList = document.getElementById('notes-list');
+
+ function renderNotes(notes) {
+   if (!notesList) return;
+
+   notesList.replaceChildren();
+
+   if (notes.length === 0) {
+     const empty = document.createElement('li');
+     empty.className = 'empty-message';
+     empty.textContent = 'No notes saved';
+     notesList.appendChild(empty);
+     return;
+   }
+
+   notes.slice().reverse().forEach((note) => {
+     const item = document.createElement('li');
+     item.className = 'note-item';
+
+     const text = document.createElement('p');
+     text.textContent = note.text;
+
+     const title = document.createElement('small');
+     title.textContent = note.title || 'Note';
+
+     item.appendChild(text);
+     item.appendChild(title);
+     notesList.appendChild(item);
+   });
+ }
+
+ chrome.storage.local.get({ notes: [] }, (data) => {
+   if (chrome.runtime.lastError) {
+     console.error('Could not load notes:', chrome.runtime.lastError.message);
+     return;
+   }
+
+   renderNotes(data.notes || []);
+ });
+
+ if (saveNoteBtn && noteInput) {
+   saveNoteBtn.addEventListener('click', () => {
+     const text = noteInput.value.trim();
+
+     if (!text) {
+       noteInput.focus();
+       return;
+     }
+
+     saveNoteBtn.disabled = true;
+
+     chrome.storage.local.get({ notes: [] }, (data) => {
+       if (chrome.runtime.lastError) {
+         console.error('Could not load notes:', chrome.runtime.lastError.message);
+         saveNoteBtn.disabled = false;
+         return;
+       }
+
+       const notes = data.notes || [];
+
+       notes.push({
+         text: text,
+         title: 'Note',
+         url: '',
+         timestamp: Date.now(),
+         id: Date.now() + Math.random().toString(36).slice(2)
+       });
+
+       chrome.storage.local.set({ notes: notes }, () => {
+         saveNoteBtn.disabled = false;
+
+         if (chrome.runtime.lastError) {
+           console.error('Could not save note:', chrome.runtime.lastError.message);
+           alert('Could not save note: ' + chrome.runtime.lastError.message);
+           return;
+         }
+
+         renderNotes(notes);
+         noteInput.value = '';
+         console.log('Note saved successfully');
+       });
+     });
+   });
+ }
+
  });
 
 
@@ -260,7 +350,10 @@ console.log(
 );
 
 
-if (availability === 'unavailable') {
+if (availability !== 'available' &&
+   availability !== 'downloadable' &&
+    availability !== 'downloading'
+) {
  throw new Error(
    'The AI Summarizer is not available on this device.'
  );
@@ -338,7 +431,8 @@ if (output) {
 const summarizer = await Summarizer.create({
  type: 'key-points',
  format: 'markdown',
- length: 'medium'
+ length: 'medium',
+ outputLanguage: 'en'
 });
 
 

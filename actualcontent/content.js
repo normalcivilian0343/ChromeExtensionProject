@@ -1,5 +1,40 @@
 // Active article detection
 console.log('Article Annotator content script loaded');
+
+ function showNotification(message) {
+    let notification = document.getElementById(
+        'article-annotator-notification'
+    );
+
+    if (!notification) {
+        notification = document.createElement('div');
+        notification.id = 'article-annotator-notification';
+
+        notification.style.cssText = `
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            max-width: 320px;
+            background: #222;
+            color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            font: 14px/1.5 Arial, sans-serif;
+            z-index: 2147483647;
+            `;
+
+            document.body.appendChild(notification);
+    }
+    
+    notification.textContent = message;
+    notification.style.display = 'block';
+
+    clearTimeout(notification_hideTimeout);
+    notification_hideTimeout = setTimeout(() => {
+        notification.style.display = 'none';
+    }, 2500);
+}
+
 function detectArticle() {
     // Get the main article content
     const article = document.querySelector('article') || 
@@ -19,6 +54,7 @@ function detectArticle() {
                 url: window.location.href,
                 title: document.title,
                 timestamp: Date.now()
+                
             }
         }, () => {
         console.log('Article detected and saved');
@@ -74,7 +110,7 @@ function handleHighlight() {
         range.surroundContents(mark);
 
         saveHighlight(selectedText);
-
+console.log('Highlight handler called:', selectedText);
         showNotification('Text highlighted!');
 
         selection.removeAllRanges();
@@ -91,6 +127,10 @@ function handleHighlight() {
 
 function saveHighlight(text) {
     chrome.storage.local.get({ highlights: [] }, (data) => {
+        if(chrome.runtime.lastError){
+            console.error('Could not load highlights:', chrome.runtime.lastError.message);
+            return;
+        }
         const highlights = data.highlights;
         highlights.push({
             text: text,
@@ -100,6 +140,10 @@ function saveHighlight(text) {
             id: Date.now() + Math.random().toString(36).substr(2, 9) // Unique ID
         });
         chrome.storage.local.set({ highlights }, () => {
+            if (chrome.runtime.lastError) {
+                console.error('Could not save highlight:', chrome.runtime.lastError.message);
+                return;
+            }
             console.log('Highlight saved:', text.substring(0, 50) + '...');
         });
     });
@@ -116,6 +160,8 @@ let isDefineMode = false;
 
 function toggleDefineMode() {
     isDefineMode = !isDefineMode;
+
+        console.log('Define mode is now:', isDefineMode);
 
     if (isDefineMode) {
         showNotification(
@@ -134,6 +180,7 @@ function toggleDefineMode() {
 }
 
 function handleDefinition(event) {
+
     if (!isDefineMode) {
         return;
     }
@@ -156,7 +203,7 @@ function handleDefinition(event) {
         .replace(/^[^\w'-]+|[^\w'-]+$/g, '')
         .toLowerCase();
 
-    if (!cleanWord) {
+    if (!cleanWord || /\s/.test(cleanWord)) {
         return;
     }
 
@@ -180,30 +227,39 @@ function handleDefinition(event) {
                     chrome.runtime.lastError.message
                 );
 
-                showDefinitionPopup(
-                    cleanWord,
-                    'Unable to look up this word.',
-                    event.clientX,
-                    event.clientY
-                );
-
                 return;
             }
 
     
+                const definition =
+                response?.definition ||
+                response?.meaning ||
+                response?.text;
+
+            if (!definition) {
+                showDefinitionPopup(
+                    cleanWord,
+                    response?.error || 'No definition returned.',
+                    event.clientX,
+                    event.clientY
+                );
                 return;
             }
 
             showDefinitionPopup(
                 cleanWord,
-                response.definition,
+                definition,
                 event.clientX,
                 event.clientY
             );
         }
+    );
+}
+
+        
 
     
-
+ 
 function showDefinitionPopup(word, definition, x, y) {
     removeDefinitionPopup();
 
@@ -292,107 +348,6 @@ function removeDefinitionPopup() {
 }
 
 
-function handleDefinition(event) {
-    const selection = window.getSelection().toString().trim();
-    
-    if (selection.length > 0 && selection.split(' ').length === 1) {
-        // Single word selected
-        const word = selection.toLowerCase();
-        
-        // Use Dictionary API
-        fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`)
-            .then(response => {
-                if (!response.ok) throw new Error('Word not found');
-                return response.json();
-            })
-            .then(data => {
-                const definition = data[0].meanings[0].definitions[0].definition;
-                showDefinitionPopup(word, definition, event.clientX, event.clientY);
-            })
-            .catch(error => {
-                showDefinitionPopup(word, 'Definition not found', event.clientX, event.clientY);
-            });
-    }
-}
-
-// Helper function to show definition popup
-function showDefinitionPopup(word, definition, x, y) {
-    // Remove any existing popup
-    const existingPopup = document.getElementById('definition-popup');
-    if (existingPopup) existingPopup.remove();
-    
-    const popup = document.createElement('div');
-    popup.id = 'definition-popup';
-    popup.style.cssText = `
-        position: fixed;
-        left: ${x}px;
-        top: ${y - 10}px;
-        background: white;
-        border: 1px solid #ccc;
-        border-radius: 8px;
-        padding: 12px 16px;
-        max-width: 300px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        z-index: 10000;
-        font-family: Arial, sans-serif;
-        font-size: 14px;
-    `;
-    
-    popup.innerHTML = `
-        <strong style="color: #2c3e50; display: block; margin-bottom: 4px;">${word}</strong>
-        <span style="color: #34495e;">${definition}</span>
-        <button onclick="this.parentElement.remove()" style="
-            position: absolute;
-            top: 4px;
-            right: 8px;
-            background: none;
-            border: none;
-            font-size: 16px;
-            cursor: pointer;
-            color: #999;
-        ">×</button>
-    `;
-    
-    document.body.appendChild(popup);
-    
-    // Auto-remove after 5 seconds
-    setTimeout(() => {
-        if (popup.parentElement) popup.remove();
-    }, 5000);
-}
-
-// Helper function to show notifications
-function showNotification(message) {
-    const notification = document.createElement('div');
-    notification.style.cssText = `
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        background: #333;
-        color: white;
-        padding: 12px 20px;
-        border-radius: 8px;
-        font-family: Arial, sans-serif;
-        font-size: 14px;
-        z-index: 10000;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-        animation: slideIn 0.3s ease-out;
-        max-width: 350px;
-    `;
-    
-    notification.textContent = message;
-    document.body.appendChild(notification);
-    
-    // Auto-remove after 3 seconds
-    setTimeout(() => {
-        if (notification.parentElement) {
-            notification.style.opacity = '0';
-            notification.style.transition = 'opacity 0.3s';
-            setTimeout(() => notification.remove(), 300);
-        }
-    }, 3000);
-}
-
 // Add CSS animation
 const style = document.createElement('style');
 style.textContent = `
@@ -448,7 +403,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 });
 
 // Cleanup listeners when extension is disabled
-window.addEventListener('unload', () => {
-    document.removeEventListener("mouseup", handleHighlight);
-    document.removeEventListener("dblclick", handleDefinition);
-});
+//window.addEventListener('unload', () => {
+//    document.removeEventListener("mouseup", handleHighlight);
+//    document.removeEventListener("dblclick", handleDefinition);
+//});
