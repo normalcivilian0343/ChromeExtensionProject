@@ -29,3 +29,6 @@ To be able to use this version of our project, you need to be on an actual artic
 6. Clear all data - press this button to reset everything, both highlights and notes - be sure not to accidently press it!
 
 That is all for now but keep a look out for more features to come!
+
+# Demo link
+https://drive.google.com/file/d/12wErFCQQ2sF8yMFJpL5mzN583hv3sAxe/view?usp=sharing 
