@@ -11,6 +11,12 @@ You now have full access to Article Annotater!! Enjoy the chrome extension!
 # What exactly does our project do?
 While you open an article, it allows you to take notes, have an AI summary, define specific words, and save highlighted/annotated sentences, so that the next time you open up the article, you can see what exactly you wanted to remember! It creates an easy and usable workspace, instead of having a chopped up work ethic.
 
+# Please read this section
+If one of the features doesn't work, it should, because everything is functional, so simply refresh - everything should work!!
+
+For the define and highlight buttons: you should see a small black popup box in the right hand corner of your screen
+All the other buttons: just press and use it!
+MAKE SURE TO DEACTIVATE HIGHLIGHT TO DEFINE AND VISE VERSA -- YOU CANNOT DO BOTH AT THE SAME TIME
 
 # How to use each feature!
 To be able to use this version of our project, you need to be on an actual article/website that has text for you to read! PLEASE DO NOT USE EXTENSION ON THIS GIT RELEASE
