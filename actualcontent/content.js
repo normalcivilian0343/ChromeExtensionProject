@@ -1,5 +1,6 @@
 // Active article detection
 console.log('Article Annotator content script loaded');
+let notification_hideTimeout;
 
  function showNotification(message) {
     let notification = document.getElementById(
@@ -181,17 +182,20 @@ function toggleDefineMode() {
 
 function handleDefinition(event) {
 
-    if (!isDefineMode) {
-        return;
-    }
+    console.log('DEFINE HANDLER FIRED');
 
-    const selection = window.getSelection();
+    console.log('Double-click detected!');
+
+        const selection = window.getSelection();
+const word = selection ? selection.toString().trim() : '';
+console.log('Selected word:', word);
+ 
+    
 
     if (!selection || selection.rangeCount === 0) {
         return;
     }
 
-    const word = selection.toString().trim();
 
     // Only define a single word
     if (!word || /\s/.test(word)) {
@@ -283,6 +287,7 @@ function showDefinitionPopup(word, definition, x, y) {
         font-size: 14px;
         line-height: 1.5;
         box-sizing: border-box;
+        
     `;
 
     const title = document.createElement('div');

@@ -1,10 +1,18 @@
+
+
 // Service worker
 // Short-lived: the browser may terminate the service worker when idle
 // and wake it again when an extension event is triggered.
 
+console.log('ARTICLE ANNOTATOR BACKGROUND LOADED');
+
 // Triggered when the extension is first installed or updated.
 chrome.runtime.onInstalled.addListener(() => {
-    chrome.contextMenus.create(
+    chrome.contextMenus.remove(
+        "aa-highlight-selected-text",
+        () => {
+        chrome.runtime.lastError;
+        chrome.contextMenus.create(
         {
             id: "aa-highlight-selected-text",
             title: "Highlight with Annotator",
@@ -19,9 +27,10 @@ chrome.runtime.onInstalled.addListener(() => {
                 return;
             }
 
+        });
+    }
+);
             console.log("Extension successfully installed");
-        }
-    );
 });
 
 // Triggered when a context-menu item is clicked.
@@ -65,6 +74,7 @@ chrome.runtime.onMessage.addListener(
         if (!message || message.action !== 'defineWord') {
             return;
         }
+console.log('DEFINE WORD REQUEST RECEIVED:', message.word);
 
         const word = String(message.word || '')
             .trim()
@@ -115,3 +125,5 @@ chrome.runtime.onMessage.addListener(
         return true;
     }
 );
+
+

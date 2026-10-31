@@ -1,3 +1,4 @@
+/*
 //when popup is opened
 
 
@@ -331,4 +332,4 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 });
-
+*/

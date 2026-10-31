@@ -312,7 +312,13 @@ if (detectBtn) {
    highlightBtn.addEventListener('click', () => {
      sendMessageToActiveTab({
        action: 'toggleHighlight'
-     });
+     })
+        .then(response => {
+            console.log('Highlight response:', response);
+        })
+        .catch(error => {
+            console.error('Highlight error:', error);
+      });
    });
  }
 
@@ -326,7 +332,6 @@ if (summarizeBtn) {
  summarizeBtn.addEventListener('click', async () => {
    try {
      if (output) {
-       outputLanguage: "en"
        output.textContent = 'Generating summary...';
      }
 
@@ -493,6 +498,12 @@ console.log('Summary returned:', summary);
    defineBtn.addEventListener('click', () => {
      sendMessageToActiveTab({
        action: 'toggleDefine'
+       })
+        .then(response => {
+            console.log('Define response:', response);
+        })
+        .catch(error => {
+            console.error('Define error:', error);
      });
    });
  }
